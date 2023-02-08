@@ -18,34 +18,33 @@ extern char b[10][9];
 extern int m, n;
 extern int tox, toy;
 extern int type;
-extern int redx ;
+extern int redx;
 extern int redy;
-extern int blackx ;
+extern int blackx;
 extern int blacky;
 extern int side;
 extern int mylayer;
 extern int firststep;
-extern bool isin(int i, int j);
-extern int lwindow;
-extern int rwindow;
 extern std::vector<std::string> name1;
+
 void show();
 bool isdefeat(int flag);
 bool ismeet();
-void cut(int layer, int r, int i, int j, int & alpha, int & beta, int a, int b, int ty,int &current);
+bool isin(int i, int j);
+void cut(int layer, int r, int i, int j, int& aslpha, int& beta, int a, int b, int ty, int& current);
 int find(char flag, int layer, int alpha, int beta);
-int eager_find(int layer,int target,int lwindow,int rwindow,int flag);
+int eager_find(int layer, int target, int lwindow, int rwindow, int flag);
 //int failsoft_find(char flag, int layer, int alpha, int beta);
 int getvalue();
 void show_AND_make_move();
-struct movechess 
+struct movechess
 {
 	int i;
 	int j;
 	int x;
 	int y;
 	int val;
-	movechess(int a, int b, int c, int d, int e): i(a), j(b), x(c), y(d),val(e)
+	movechess(int a, int b, int c, int d, int e) : i(a), j(b), x(c), y(d), val(e)
 	{
 
 	}

@@ -36,7 +36,7 @@ int getvalue()
 				int g;
 				for (g = 1; g < 10; g++)
 				{
-					if (b[i + g][j] * side > 0) nu += 2;
+					if (isin(i + g, j) && b[i + g][j] * side > 0) nu += 2;
 					if (!isin(i + g, j) || b[i + g][j] * side > 0) break;
 					else
 					{
@@ -50,7 +50,7 @@ int getvalue()
 				}
 				for (g = -1; g > -10; g--)
 				{
-					if (b[i + g][j] * side > 0) nu += 2;
+					if (isin(i + g, j) && b[i + g][j] * side > 0) nu += 2;
 					if (!isin(i + g, j) || b[i + g][j] * side > 0) break;
 					else
 					{
@@ -64,7 +64,7 @@ int getvalue()
 				}
 				for (g = 1; g < 9; g++)
 				{
-					if (b[i][j + g] * side > 0) nu += 2;
+					if (isin(i, j + g) && b[i][j + g] * side > 0) nu += 2;
 					if (!isin(i, j + g) || b[i][j + g] * side > 0) break;
 					else
 					{
@@ -78,7 +78,7 @@ int getvalue()
 				}
 				for (g = -1; g > -9; g--)
 				{
-					if (b[i][j + g] * side > 0) nu += 2;
+					if (isin(i, j + g) && b[i][j + g] * side > 0) nu += 2;
 					if (!isin(i, j + g) || b[i][j + g] * side > 0) break;
 					else
 					{
@@ -100,7 +100,7 @@ int getvalue()
 				int g;
 				for (g = 1; g < 10; g++)
 				{
-					if (b[i + g][j] * side > 0) nu += 2;
+					if (isin(i + g, j) && b[i + g][j] * side > 0) nu += 2;
 					if (!isin(i + g, j) || b[i + g][j] * side > 0) break;
 					else
 					{
@@ -114,7 +114,7 @@ int getvalue()
 				}
 				for (g = -1; g > -10; g--)
 				{
-					if (b[i + g][j] * side > 0) nu += 2;
+					if (isin(i + g, j) && b[i + g][j] * side > 0) nu += 2;
 					if (!isin(i + g, j) || b[i + g][j] * side > 0) break;
 					else
 					{
@@ -128,7 +128,7 @@ int getvalue()
 				}
 				for (g = 1; g < 9; g++)
 				{
-					if (b[i][j + g] * side > 0) nu += 2;
+					if (isin(i, j + g) && b[i][j + g] * side > 0) nu += 2;
 					if (!isin(i, j + g) || b[i][j + g] * side > 0) break;
 					else
 					{
@@ -142,7 +142,7 @@ int getvalue()
 				}
 				for (g = -1; g > -9; g--)
 				{
-					if (b[i][j + g] * side > 0) nu += 2;
+					if (isin(i, j + g) && b[i][j + g] * side > 0) nu += 2;
 					if (!isin(i, j + g) || b[i][j + g] * side > 0) break;
 					else
 					{
@@ -273,118 +273,118 @@ int getvalue()
 			}/*马估值到此为止*/
 			else if (b[i][j] == -2 * side)/* 马估值开始*/
 			{
-			side = -side;
-			int nu = 270-number;
-			if (isin(i + 1, j) && b[i + 1][j] == 0)
-			{
-				if (isin(i + 2, j + 1) && b[i + 2][j + 1] * side <= 0)
+				side = -side;
+				int nu = 270 - number;
+				if (isin(i + 1, j) && b[i + 1][j] == 0)
 				{
-					if (side == -1)
-						nu += 7;
-					else
-						nu += 5;
+					if (isin(i + 2, j + 1) && b[i + 2][j + 1] * side <= 0)
+					{
+						if (side == -1)
+							nu += 7;
+						else
+							nu += 5;
+					}
+					else if (isin(i + 2, j + 1) && b[i + 2][j + 1] * side > 0)
+					{
+						if (side == -1)
+							nu += 6;
+						else
+							nu += 5;
+					}
+					if (isin(i + 2, j - 1) && b[i + 2][j - 1] * side <= 0)
+					{
+						if (side == -1)
+							nu += 7;
+						else
+							nu += 5;
+					}
+					else if (isin(i + 2, j - 1) && b[i + 2][j - 1] * side > 0)
+					{
+						if (side == -1)
+							nu += 6;
+						else
+							nu += 5;
+					}
 				}
-				else if (isin(i + 2, j + 1) && b[i + 2][j + 1] * side > 0)
+				if (isin(i - 1, j) && b[i - 1][j] == 0)
 				{
-					if (side == -1)
+					if (isin(i - 2, j + 1) && b[i - 2][j + 1] * side <= 0)
+					{
+						if (side == 1)
+							nu += 7;
+						else
+							nu += 5;
+					}
+					else if (isin(i - 2, j + 1) && b[i - 2][j + 1] * side > 0)
+					{
+						if (side == 1)
+							nu += 6;
+						else
+							nu += 5;
+					}
+					if (isin(i - 2, j - 1) && b[i - 2][j - 1] * side <= 0)
+					{
+						if (side == 1)
+							nu += 7;
+						else
+							nu += 5;
+					}
+					else if (isin(i - 2, j - 1) && b[i - 2][j - 1] * side > 0)
+					{
+						if (side == 1)
+							nu += 6;
+						else
+							nu += 5;
+					}
+				}
+				if (isin(i, j - 1) && b[i][j - 1] == 0)
+				{
+					if (isin(i - 1, j - 2) && b[i - 1][j - 2] * side <= 0)
+					{
 						nu += 6;
-					else
+					}
+					else if (isin(i - 1, j - 2) && b[i - 1][j - 2] * side > 0)
+					{
 						nu += 5;
-				}
-				if (isin(i + 2, j - 1) && b[i + 2][j - 1] * side <= 0)
-				{
-					if (side == -1)
-						nu += 7;
-					else
-						nu += 5;
-				}
-				else if (isin(i + 2, j - 1) && b[i + 2][j - 1] * side > 0)
-				{
-					if (side == -1)
+					}
+					if (isin(i + 1, j - 2) && b[i + 1][j - 2] * side <= 0)
+					{
 						nu += 6;
-					else
+					}
+					else if (isin(i + 1, j - 2) && b[i + 1][j - 2] * side > 0)
+					{
 						nu += 5;
+					}
 				}
-			}
-			if (isin(i - 1, j) && b[i - 1][j] == 0)
-			{
-				if (isin(i - 2, j + 1) && b[i - 2][j + 1] * side <= 0)
+				if (isin(i, j + 1) && b[i][j + 1] == 0)
 				{
-					if (side == 1)
-						nu += 7;
-					else
-						nu += 5;
-				}
-				else if (isin(i - 2, j + 1) && b[i - 2][j + 1] * side > 0)
-				{
-					if (side == 1)
+					if (isin(i - 1, j + 2) && b[i - 1][j + 2] * side <= 0)
+					{
 						nu += 6;
-					else
+					}
+					else if (isin(i - 1, j + 2) && b[i - 1][j + 2] * side > 0)
+					{
 						nu += 5;
-				}
-				if (isin(i - 2, j - 1) && b[i - 2][j - 1] * side <= 0)
-				{
-					if (side == 1)
-						nu += 7;
-					else
-						nu += 5;
-				}
-				else if (isin(i - 2, j - 1) && b[i - 2][j - 1] * side > 0)
-				{
-					if (side == 1)
+					}
+					if (isin(i + 1, j + 2) && b[i + 1][j + 2] * side <= 0)
+					{
 						nu += 6;
-					else
+					}
+					else if (isin(i + 1, j + 2) && b[i + 1][j + 2] * side > 0)
+					{
 						nu += 5;
+					}
 				}
-			}
-			if (isin(i, j - 1) && b[i][j - 1] == 0)
-			{
-				if (isin(i - 1, j - 2) && b[i - 1][j - 2] * side <= 0)
+				if (side == 1)
 				{
-					nu += 6;
+					nu += 4 * (9 - abs(i - 1));
 				}
-				else if (isin(i - 1, j - 2) && b[i - 1][j - 2] * side > 0)
+				else
 				{
-					nu += 5;
+					nu += 4 * (9 - abs(i - 8));
 				}
-				if (isin(i + 1, j - 2) && b[i + 1][j - 2] * side <= 0)
-				{
-					nu += 6;
-				}
-				else if (isin(i + 1, j - 2) && b[i + 1][j - 2] * side > 0)
-				{
-					nu += 5;
-				}
-			}
-			if (isin(i, j + 1) && b[i][j + 1] == 0)
-			{
-				if (isin(i - 1, j + 2) && b[i - 1][j + 2] * side <= 0)
-				{
-					nu += 6;
-				}
-				else if (isin(i - 1, j + 2) && b[i - 1][j + 2] * side > 0)
-				{
-					nu += 5;
-				}
-				if (isin(i + 1, j + 2) && b[i + 1][j + 2] * side <= 0)
-				{
-					nu += 6;
-				}
-				else if (isin(i + 1, j + 2) && b[i + 1][j + 2] * side > 0)
-				{
-					nu += 5;
-				}
-			}
-			if (side == 1)
-			{
-				nu += 4 * (9 - abs(i - 1));
-			}
-			else
-			{
-				nu += 4 * (9 - abs(i - 8));
-			}
-			v2 += nu;
-			side = -side;
+				v2 += nu;
+				side = -side;
 			}/* 马估值结束*/
 			else if (b[i][j] == 3 * side)/* 象估值开始*/
 			{
@@ -488,44 +488,44 @@ int getvalue()
 			}/* 象估值结束*/
 			else if (b[i][j] == 4 * side)//士估值开始
 			{
-			int nu = 110;
-			if (i + 1 >= 7 && i + 1 <= 9 && j + 1 >= 3 && j + 1 <= 5 && side == 1 || i + 1 >= 0 && i + 1 <= 2 && j + 1 >= 3 && j + 1 <= 5 && side == -1)
-			{
-				if (b[i + 1][j + 1] <= 0)
-					nu += 3;
-				else if (b[i + 1][j + 1] == b[i][j])
-					nu += 4;
-				else
-					nu += 1;
-			}
-			if (i - 1 >= 7 && i - 1 <= 9 && j + 1 >= 3 && j + 1 <= 5 && side == 1 || i - 1 >= 0 && i - 1 <= 2 && j + 1 >= 3 && j + 1 <= 5 && side == -1)
-			{
-				if (b[i - 1][j + 1] <= 0)
-					nu += 3;
-				else if (b[i - 1][j + 1] == b[i][j])
-					nu += 4;
-				else
-					nu += 1;
-			}
-			if (i + 1 >= 7 && i + 1 <= 9 && j - 1 >= 3 && j - 1 <= 5 && side == 1 || i + 1 >= 0 && i + 1 <= 2 && j - 1 >= 3 && j - 1 <= 5 && side == -1)
-			{
-				if (b[i + 1][j - 1] <= 0)
-					nu += 3;
-				else if (b[i + 1][j - 1] == b[i][j])
-					nu += 4;
-				else
-					nu += 1;
-			}
-			if (i - 1 >= 7 && i - 1 <= 9 && j - 1 >= 3 && j - 1 <= 5 && side == 1 || i - 1 >= 0 && i - 1 <= 2 && j - 1 >= 3 && j - 1 <= 5 && side == -1)
-			{
-				if (b[i - 1][j - 1] <= 0)
-					nu += 3;
-				else if (b[i - 1][j - 1] == b[i][j])
-					nu += 4;
-				else
-					nu += 1;
-			}
-			v1 += nu;
+				int nu = 110;
+				if (i + 1 >= 7 && i + 1 <= 9 && j + 1 >= 3 && j + 1 <= 5 && side == 1 || i + 1 >= 0 && i + 1 <= 2 && j + 1 >= 3 && j + 1 <= 5 && side == -1)
+				{
+					if (b[i + 1][j + 1] <= 0)
+						nu += 3;
+					else if (b[i + 1][j + 1] == b[i][j])
+						nu += 4;
+					else
+						nu += 1;
+				}
+				if (i - 1 >= 7 && i - 1 <= 9 && j + 1 >= 3 && j + 1 <= 5 && side == 1 || i - 1 >= 0 && i - 1 <= 2 && j + 1 >= 3 && j + 1 <= 5 && side == -1)
+				{
+					if (b[i - 1][j + 1] <= 0)
+						nu += 3;
+					else if (b[i - 1][j + 1] == b[i][j])
+						nu += 4;
+					else
+						nu += 1;
+				}
+				if (i + 1 >= 7 && i + 1 <= 9 && j - 1 >= 3 && j - 1 <= 5 && side == 1 || i + 1 >= 0 && i + 1 <= 2 && j - 1 >= 3 && j - 1 <= 5 && side == -1)
+				{
+					if (b[i + 1][j - 1] <= 0)
+						nu += 3;
+					else if (b[i + 1][j - 1] == b[i][j])
+						nu += 4;
+					else
+						nu += 1;
+				}
+				if (i - 1 >= 7 && i - 1 <= 9 && j - 1 >= 3 && j - 1 <= 5 && side == 1 || i - 1 >= 0 && i - 1 <= 2 && j - 1 >= 3 && j - 1 <= 5 && side == -1)
+				{
+					if (b[i - 1][j - 1] <= 0)
+						nu += 3;
+					else if (b[i - 1][j - 1] == b[i][j])
+						nu += 4;
+					else
+						nu += 1;
+				}
+				v1 += nu;
 			}//士估值到此为止
 			else if (b[i][j] == -4 * side)/* 士估值开始*/
 			{
@@ -572,16 +572,16 @@ int getvalue()
 			}/* 士估值结束*/
 			else if (b[i][j] == 7 * side)/* 兵估值*/
 			{
-			int nu = 135 - 3 * number;
-			if (side == 1)
-			{
-				nu += soldier_red[i][j];
-			}
-			else if (side == -1)
-			{
-				nu += soldier_black[i][j];
-			}
-			v1 += nu;
+				int nu = 135 - 3 * number;
+				if (side == 1)
+				{
+					nu += soldier_red[i][j];
+				}
+				else if (side == -1)
+				{
+					nu += soldier_black[i][j];
+				}
+				v1 += nu;
 			}
 			else if (b[i][j] == -7 * side)/* 兵估值*/
 			{
@@ -632,7 +632,7 @@ int getvalue()
 					{
 						num++;
 					}
-					if ( num >= 2)
+					if (num >= 2)
 					{
 						if (b[i + g][j] * side < 0)
 							v1 = v1 + evaluate[abs(b[i + g][j])] / pow(2, num - 1);

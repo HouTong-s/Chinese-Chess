@@ -9,11 +9,11 @@
 #endif
 #ifndef _FUNC_H_
 #define _FUNC_H_
-#define me 1
-#define opp -1
+#define RED 1
+#define BLACK -1
 extern int evaluate[8];
-extern int soldier_red[10][9];
-extern int soldier_black[10][9];
+extern int soldier_value[10][9];
+//extern int soldier_black[10][9];
 extern char b[10][9];
 extern int m, n;
 extern int tox, toy;
@@ -24,7 +24,7 @@ extern int blackx;
 extern int blacky;
 extern int side;
 extern int mylayer;
-extern int firststep;
+extern int is_firststep;
 extern std::vector<std::string> name1;
 
 void show();

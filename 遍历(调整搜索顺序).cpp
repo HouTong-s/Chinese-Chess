@@ -18,9 +18,12 @@ int find(char flag, int layer, int alpha, int beta)
 	{
 		return getvalue();
 	}
-	layer++;
+	if (layer == 0)
+	{
+		is_firststep = 0;
+	}
 	int current;
-	if (layer % 2 == 1)
+	if (layer % 2 == 0)
 		current = -20000;
 	else
 		current = 20000;
@@ -90,7 +93,6 @@ int find(char flag, int layer, int alpha, int beta)
 						if (b[i][j + g] * flag < 0) break;
 					}
 				}
-				if (beta <= alpha) break;
 			}/*      车遍历到此为止       */
 			else if (b[i][j] == 2 * flag)/*    马遍历开始(八面威风)      */
 			{
@@ -268,7 +270,6 @@ int find(char flag, int layer, int alpha, int beta)
 					origin = b[midx][midy];
 					b[midx][midy] = b[i][j];
 					b[i][j] = 0;
-					r = find(-flag, layer, alpha, beta);
 					arr.emplace_back(movechess(i, j, midx - i, midy - j, getvalue()));
 					b[i][j] = 4 * flag;
 					b[midx][midy] = origin;
@@ -391,7 +392,6 @@ int find(char flag, int layer, int alpha, int beta)
 					}
 					if (num == 2) break;
 				}
-				if (beta <= alpha) break;
 			}/* 炮遍历结束*/
 			else if (b[i][j] == 7 * flag)/*兵遍历开始 */
 			{
@@ -489,7 +489,7 @@ int find(char flag, int layer, int alpha, int beta)
 		}
 	}
 	int prechess;
-	if (layer % 2 == 1)
+	if (layer % 2 == 0)
 		sort(arr.begin(), arr.end());
 	else
 		sort(arr.rbegin(), arr.rend());
@@ -513,7 +513,7 @@ int find(char flag, int layer, int alpha, int beta)
 		prechess = b[i->i][i->j];
 		b[i->i + i->x][i->j + i->y] = b[i->i][i->j];
 		b[i->i][i->j] = 0;
-		r = find(-flag, layer, alpha, beta);
+		r = find(-flag, layer+1, alpha, beta);
 		b[i->i][i->j] = prechess;
 		b[i->i + i->x][i->j + i->y] = origin;
 		if (b[i->i][i->j] == 5 * flag)//如果是遍历的老将，要回溯老将的横纵坐标，以确定两边老将是否相遇
@@ -531,10 +531,6 @@ int find(char flag, int layer, int alpha, int beta)
 		}
 		cut(layer, r, i->i, i->j, alpha, beta, i->x, i->y, b[i->i][i->j], current);
 		if (beta <= alpha) break;
-	}
-	if (layer == 1)
-	{
-		firststep = 0;
 	}
 	return current;
 }

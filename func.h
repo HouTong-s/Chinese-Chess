@@ -20,10 +20,10 @@ extern char tempboard[10][9];
 extern int m, n;
 extern int tox, toy;
 extern int type;
-extern int redx;
-extern int redy;
-extern int blackx;
-extern int blacky;
+extern int red_y;
+extern int red_x;
+extern int black_y;
+extern int black_x;
 extern int side;
 extern int mylayer;
 extern int is_firststep;
@@ -42,12 +42,12 @@ int getRED_value(int total_chess,char arr[10][9]);
 
 struct movechess
 {
-	int i;
-	int j;
-	int x;
-	int y;
+	char x;
+	char y;
+	char move_x;
+	char move_y;
 	int val;
-	movechess(int a, int b, int c, int d, int e) : i(a), j(b), x(c), y(d), val(e)
+	movechess(char a, char b, char c, char d, int e) : x(a), y(b), move_x(c), move_y(d), val(e)
 	{
 
 	}
@@ -56,4 +56,7 @@ struct movechess
 		return val > a.val;
 	}
 };
+
+void MakeMove(std::vector<movechess>::iterator, int& , int&,char);
+void UnMove(std::vector<movechess>::iterator,int,int,char);
 #endif

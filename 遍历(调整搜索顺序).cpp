@@ -1,40 +1,50 @@
 #include"func.h"
 using namespace std;
-int find(char flag, int layer, int alpha, int beta)
-{
-	if (isdefeat(flag))
-	{
-		return -side * (int)flag * 10000;
-	}
-	if (isdefeat(-flag))
-	{
-		return side * (int)flag * 10000;
-	}
-	//老将见面
-	if (ismeet())
-	{
-		return side * (int)flag * 10000;
-	}
-	if (layer == mylayer)/*      最底层估值函数         */
-	{
-		return getvalue();
-	}
-	if (layer == 0)
-	{
-		is_firststep = 0;
-	}
-	int current;
-	if (layer % 2 == 0)
-		current = -20000;
-	else
-		current = 20000;
-	int r;
-	int g, origin;
-	vector<movechess> arr;
 
-	for (int i = 0; i < 10; i++)/* 随机取点开始 */
+void MakeMove(std::vector<movechess>::iterator i,int& origin,int & prechess,char flag)
+{
+	if (board[i->x][i->y] == 5 * flag)//如果是遍历的老将，要改变记录老将的横纵坐标，以确定两边老将是否相遇
 	{
-		for (int j = 0; j < 9; j++)
+		if (flag == 1)
+		{
+			red_y = i->y + i->move_y;
+			red_x = i->x + i->move_x;
+		}
+		else
+		{
+			black_y = i->y + i->move_y;
+			black_x = i->x + i->move_x;
+		}
+	}
+	origin = board[i->x + i->move_x][i->y + i->move_y];
+	prechess = board[i->x][i->y];
+	board[i->x + i->move_x][i->y + i->move_y] = board[i->x][i->y];
+	board[i->x][i->y] = 0;
+}
+void UnMove(std::vector<movechess>::iterator i, int origin, int prechess, char flag)
+{
+	board[i->x][i->y] = prechess;
+	board[i->x + i->move_x][i->y + i->move_y] = origin;
+	if (board[i->x][i->y] == 5 * flag)//如果是遍历的老将，要回溯老将的横纵坐标，以确定两边老将是否相遇
+	{
+		if (flag == 1)
+		{
+			red_y = i->y;
+			red_x = i->x;
+		}
+		else
+		{
+			black_y = i->y;
+			black_x = i->x;
+		}
+	}
+}
+void generateMove(vector<movechess>& arr,char flag)
+{
+	int origin, g;
+	for (char i = 0; i < 10; i++)/* 随机取点开始 */
+	{
+		for (char j = 0; j < 9; j++)
 		{
 			if (board[i][j] == flag)/*     车遍历方法开始(四个方向)      */
 			{
@@ -489,48 +499,50 @@ int find(char flag, int layer, int alpha, int beta)
 			}/* 兵遍历结束 */
 		}
 	}
+}
+int find(char flag, int layer, int alpha, int beta)
+{
+	if (isdefeat(flag))
+	{
+		return -side * (int)flag * 10000;
+	}
+	if (isdefeat(-flag))
+	{
+		return side * (int)flag * 10000;
+	}
+	//老将见面
+	if (ismeet())
+	{
+		return side * (int)flag * 10000;
+	}
+	if (layer == mylayer)/*      最底层估值函数         */
+	{
+		return getvalue();
+	}
+	if (layer == 0)
+	{
+		is_firststep = 0;
+	}
+	int current;
+	if (layer % 2 == 0)
+		current = -20000;
+	else
+		current = 20000;
+	int r;
+	int g, origin;
+	vector<movechess> arr;
+	generateMove(arr, flag);
 	int prechess;
 	if (layer % 2 == 0)
 		sort(arr.begin(), arr.end());
 	else
 		sort(arr.rbegin(), arr.rend());
-	int j = 0;
 	for (auto i = arr.begin(); i != arr.end(); i++)
-	{
-		if (board[i->i][i->j] == 5 * flag)//如果是遍历的老将，要改变记录老将的横纵坐标，以确定两边老将是否相遇
-		{
-			if (flag == 1)
-			{
-				redx = i->j + i->y;
-				redy = i->i + i->x;
-			}
-			else
-			{
-				blackx = i->j + i->y;
-				blacky = i->i + i->x;
-			}
-		}
-		origin = board[i->i + i->x][i->j + i->y];
-		prechess = board[i->i][i->j];
-		board[i->i + i->x][i->j + i->y] = board[i->i][i->j];
-		board[i->i][i->j] = 0;
-		r = find(-flag, layer+1, alpha, beta);
-		board[i->i][i->j] = prechess;
-		board[i->i + i->x][i->j + i->y] = origin;
-		if (board[i->i][i->j] == 5 * flag)//如果是遍历的老将，要回溯老将的横纵坐标，以确定两边老将是否相遇
-		{
-			if (flag == 1)
-			{
-				redx = i->j;
-				redy = i->i;
-			}
-			else
-			{
-				blackx = i->j;
-				blacky = i->i;
-			}
-		}
-		cut(layer, r, i->i, i->j, alpha, beta, i->x, i->y, board[i->i][i->j], current);
+	{	
+		MakeMove(i, origin, prechess, flag);
+		r = find(-flag, layer + 1, alpha, beta);
+		UnMove(i, origin, prechess, flag);
+		cut(layer, r, i->x, i->y, alpha, beta, i->move_x, i->move_y, board[i->x][i->y], current);
 		if (beta <= alpha) break;
 	}
 	return current;

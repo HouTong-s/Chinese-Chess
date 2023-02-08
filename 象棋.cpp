@@ -96,10 +96,10 @@ int soldier_black[10][9] = { {0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 ,0 },
 							{0 ,4 ,8 ,12,16,12,8 ,4 ,0 }, };
 */
 //int evaluate[8] = { 0,40,22,12,12,120,22,8 };
-int redx = 4;
-int redy = 9;
-int blackx = 4;
-int blacky = 0;
+int red_y = 4;
+int red_x = 9;
+int black_y = 4;
+int black_x = 0;
 int mylayer = 0;
 int m = 0, n = 0;
 int tox = 0, toy = 0;
@@ -117,13 +117,13 @@ int main()
 		{
 			if (board[i][j] == 5)
 			{
-				redx = j;
-				redy = i;
+				red_y = j;
+				red_x = i;
 			}
 			if (board[i][j] == -5)
 			{
-				blackx = j;
-				blacky = i;
+				black_y = j;
+				black_x = i;
 			}
 		}
 	}

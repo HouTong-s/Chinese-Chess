@@ -9,12 +9,12 @@ bool isdefeat(int flag)
 }
 bool ismeet()/* 判断两边老将是否碰面  */
 {
-	if (redx != blackx) return false;
+	if (red_y != black_y) return false;
 	else
 	{
-		for (int i = blacky + 1; i < redy; i++)
+		for (int i = black_x + 1; i < red_x; i++)
 		{
-			if (board[i][redx] != 0) return false;
+			if (board[i][red_y] != 0) return false;
 		}
 		return true;
 	}
@@ -96,13 +96,13 @@ void show_AND_make_move()
 		{
 			if (board[i][j] == 5)
 			{
-				redx = j;
-				redy = i;
+				red_y = j;
+				red_x = i;
 			}
 			else if (board[i][j] == -5)
 			{
-				blackx = j;
-				blacky = i;
+				black_y = j;
+				black_x = i;
 			}
 		}
 }

@@ -4,7 +4,7 @@ bool isdefeat(int flag)
 {
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < 9; j++)
-			if (b[i][j] == 5 * flag) return false;
+			if (board[i][j] == 5 * flag) return false;
 	return true;
 }
 bool ismeet()/* 判断两边老将是否碰面  */
@@ -14,7 +14,7 @@ bool ismeet()/* 判断两边老将是否碰面  */
 	{
 		for (int i = blacky + 1; i < redy; i++)
 		{
-			if (b[i][redx] != 0) return false;
+			if (board[i][redx] != 0) return false;
 		}
 		return true;
 	}
@@ -47,7 +47,7 @@ void cut(int layer, int r, int i, int j, int& alpha, int& beta, int a, int b, in
 				}*/
 		else if (r == current)
 		{
-			if (rand() % 100 == 0)
+			if (rand() % 200 == 0)
 			{
 				m = i;
 				n = j;
@@ -76,23 +76,30 @@ bool isin(int i, int j)
 }
 void show_AND_make_move()
 {
-	if (side == RED)
-		cout << "红方" << " ";
-	else
-		cout << "黑方" << " ";
 	int q = abs(type);
-	cout << name1[q] << n + 1 << "到" << n + toy + 1 << endl;
-	b[m][n] = 0;
-	b[m + tox][n + toy] = type;
+	if (side == RED)
+	{
+		cout << "红方" << " ";
+		cout << chess_names[q] << 9 - n  << "到" << 9 - n - toy << endl;
+	}
+		
+	else
+	{
+		cout << "黑方" << " ";
+		cout << chess_names[q] << n + 1 << "到" << n + toy + 1 << endl;
+	}
+	
+	board[m][n] = 0;
+	board[m + tox][n + toy] = type;
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < 9; j++)
 		{
-			if (b[i][j] == 5)
+			if (board[i][j] == 5)
 			{
 				redx = j;
 				redy = i;
 			}
-			else if (b[i][j] == -5)
+			else if (board[i][j] == -5)
 			{
 				blackx = j;
 				blacky = i;
@@ -106,11 +113,11 @@ void show()
 	{
 		for (int j = 0; j < 9; j++)
 		{		
-			if(b[i][j]<0)
-				cout << "\033[30;1m"<< name1[-b[i][j]] <<"\033[0m"<< " ";
+			if(board[i][j]<0)
+				cout << "\033[30;1m"<< chess_names[-board[i][j]] <<"\033[0m"<< " ";
 			else
 			{
-				cout << "\033[31;1m" << name1[b[i][j]] << "\033[0m" << " ";
+				cout << "\033[31;1m" << chess_names[board[i][j]] << "\033[0m" << " ";
 			}
 		}
 		cout << endl;
@@ -161,7 +168,8 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 		return q;
 	}
 	*/
-	if (1000 * (time_end - time_start) / (double)CLOCKS_PER_SEC >= 2000)
+	//时间超过2.5秒就停止继续深入寻找
+	if (1000 * (time_end - time_start) / (double)CLOCKS_PER_SEC >= 2500)
 	{
 		show_AND_make_move();
 		show();
@@ -170,8 +178,8 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 	}
 	else
 	{
-		int temp = (70 - 10 * layer) > 10 ? (70 - 10 * layer) : 10;
-		return eager_find(layer + 2, q, 20, 20, flag);
+		int temp = (80 - 15 * layer) > 10 ? (80 - 15 * layer) : 10;
+		return eager_find(layer + 2, q, temp, temp, flag);
 	}
 		
 }

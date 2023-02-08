@@ -14,7 +14,9 @@
 extern int evaluate[8];
 extern int soldier_value[10][9];
 //extern int soldier_black[10][9];
-extern char b[10][9];
+extern char board[10][9];
+//tempboard¥Ê¥¢æµœÒ∆Â≈Ã
+extern char tempboard[10][9];
 extern int m, n;
 extern int tox, toy;
 extern int type;
@@ -25,7 +27,7 @@ extern int blacky;
 extern int side;
 extern int mylayer;
 extern int is_firststep;
-extern std::vector<std::string> name1;
+extern std::vector<std::string> chess_names;
 
 void show();
 bool isdefeat(int flag);
@@ -34,9 +36,10 @@ bool isin(int i, int j);
 void cut(int layer, int r, int i, int j, int& aslpha, int& beta, int a, int b, int ty, int& current);
 int find(char flag, int layer, int alpha, int beta);
 int eager_find(int layer, int target, int lwindow, int rwindow, int flag);
-//int failsoft_find(char flag, int layer, int alpha, int beta);
 int getvalue();
 void show_AND_make_move();
+int getRED_value(int total_chess,char arr[10][9]);
+
 struct movechess
 {
 	int i;

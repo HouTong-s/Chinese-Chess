@@ -1,9 +1,9 @@
 #include"func.h"
 
 //估值函数是以红方视角来看的
-int getRED_value(int total_chess,char temp_board[10][9])
+short getRED_value(int total_chess,char temp_board[10][9])
 {
-	int result = 0;
+	short result = 0;
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < 9; j++)
 		{
@@ -13,7 +13,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 			}
 			if (temp_board[i][j] == 1)/* 红车估值开始 */
 			{
-				int nu = 600;
+				int nu = 620;
 				int g;
 				for (g = 1; g < 10; g++)
 				{
@@ -76,7 +76,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 			}/*车估值到此为止 */
 			else if (temp_board[i][j] == 2)/* 红马估值开始*/
 			{
-				int nu = 300 - 2 * total_chess;
+				int nu = 320 - 2 * total_chess;
 				if (isin(i + 1, j) && temp_board[i + 1][j] == 0)
 				{
 					if (isin(i + 2, j + 1) && temp_board[i + 2][j + 1] <= 0)
@@ -153,7 +153,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 						nu += 5;
 					}
 				}
-				nu += 4 * (9 - i);
+				nu += 5 * (9 - i);
 				result += nu;
 			}/*红马估值到此为止*/
 			else if (temp_board[i][j] == 3)/* 红象估值开始*/
@@ -294,7 +294,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 						if (num >= 2)
 						{
 							if (temp_board[i + g][j] < 0)
-								result += 8 / pow(2, num - 2);
+								result += (8 >> (num-2) );
 							else if (temp_board[i + g][j] > 0 && num == 2)
 							{
 								result += 5;
@@ -321,7 +321,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 						if (num >= 2)
 						{
 							if (temp_board[i + g][j] < 0)
-								result += 8 / pow(2, num - 2);
+								result += (8 >> (num-2) );
 							else if (temp_board[i + g][j] > 0 && num == 2)
 							{
 								result += 5;
@@ -348,7 +348,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 						if (num >= 2)
 						{
 							if (temp_board[i][j + g] < 0)
-								result += 8 / pow(2, num - 2);
+								result += (8 >> (num-2) );
 							else if (temp_board[i][j + g] > 0 && num == 2)
 							{
 								result += 5;
@@ -375,7 +375,7 @@ int getRED_value(int total_chess,char temp_board[10][9])
 						if (num >= 2)
 						{
 							if (temp_board[i][j + g] < 0)
-								result += 8 / pow(2, num - 2);
+								result += (8 >> (num-2) );
 							else if (temp_board[i][j + g] > 0 && num == 2)
 							{
 								result += 5;
@@ -387,11 +387,11 @@ int getRED_value(int total_chess,char temp_board[10][9])
 		}
 	return result;
 }
-int getvalue()
+short getvalue()
 {
-	int v1 = 0;
-	int v2 = 0;
-	int number = 0;
+	short v1 = 0;
+	short v2 = 0;
+	short number = 0;
 	for (int i = 0; i < 10; i++)
 		for (int j = 0; j < 9; j++)
 			if (board[i][j] != 0) number++;

@@ -500,7 +500,7 @@ void generateMove(vector<movechess>& arr,char flag)
 		}
 	}
 }
-int find(char flag, int layer, int alpha, int beta)
+short find(char flag, int layer, int alpha, int beta)
 {
 	if (isdefeat(flag))
 	{
@@ -523,13 +523,13 @@ int find(char flag, int layer, int alpha, int beta)
 	{
 		is_firststep = 0;
 	}
-	int current;
+	short current;
 	if (layer % 2 == 0)
 		current = -20000;
 	else
 		current = 20000;
 	int r;
-	int g, origin;
+	int origin;
 	vector<movechess> arr;
 	generateMove(arr, flag);
 	int prechess;

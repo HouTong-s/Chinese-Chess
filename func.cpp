@@ -19,7 +19,7 @@ bool ismeet()/* 判断两边老将是否碰面  */
 		return true;
 	}
 }
-void cut(int layer, int r, int i, int j, int& alpha, int& beta, int a, int b, int ty, int& current)
+void cut(int layer, int r, int i, int j, int& alpha, int& beta, int a, int b, int ty, short& current)
 {
 	if (layer == 0)/*    第一层返回下一步招法，第一层不可能有分支被剪掉（如果beta为无穷）(如果为渴望搜索算法，则有可能会剪枝)  */
 	{
@@ -149,7 +149,7 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 		q = find(flag, 0, target + rwindow, 10000);
 	}
 	clock_t time_end = clock();
-	cout << layer << "层time use:" << 1000 * (time_end - time_start) / (double)CLOCKS_PER_SEC << "ms " << layer << "层估值：" << q << endl;
+	cout << layer << "层time use:" << 1000 * (int)(time_end - time_start) / (double)CLOCKS_PER_SEC << "ms " << layer << "层估值：" << q << endl;
 	if (q == -10000)
 	{
 		if (side == RED)
@@ -168,8 +168,8 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 		return q;
 	}
 	*/
-	//时间超过2.5秒就停止继续深入寻找
-	if (1000 * (time_end - time_start) / (double)CLOCKS_PER_SEC >= 2500)
+	//时间超过2秒就停止继续深入寻找
+	if (1000 * (int)(time_end - time_start) / (double)CLOCKS_PER_SEC >= 2000)
 	{
 		show_AND_make_move();
 		show();
@@ -178,7 +178,7 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 	}
 	else
 	{
-		int temp = (80 - 15 * layer) > 10 ? (80 - 15 * layer) : 10;
+		int temp = (85 - 15 * layer) > 10 ? (85 - 15 * layer) : 10;
 		return eager_find(layer + 2, q, temp, temp, flag);
 	}
 		

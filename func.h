@@ -29,18 +29,6 @@ extern int mylayer;
 extern int is_firststep;
 extern std::vector<std::string> chess_names;
 
-void show();
-bool isdefeat(int flag);
-bool ismeet();
-bool isin(int i, int j);
-void cut(int layer, int r, int i, int j, int& aslpha, int& beta, int a, int b, int ty, short& current);
-short find(char flag, int layer, int alpha, int beta);
-int eager_find(int layer, int target, int lwindow, int rwindow, int flag);
-short getvalue();
-void show_AND_make_move();
-short getRED_value(int total_chess,char arr[10][9]);
-
-
 struct movechess
 {
 	char x;
@@ -48,17 +36,24 @@ struct movechess
 	char move_x;
 	char move_y;
 	short val;
-	movechess(char a, char b, char c, char d, short e) : x(a), y(b), move_x(c), move_y(d), val(e)
-	{
-
-	}
-	bool operator<(movechess a) const
-	{
-		return val > a.val;
-	}
+	movechess(char a, char b, char c, char d, short e);
+	bool operator<(movechess a) const;
 };
 
+void show();
+bool isdefeat(int flag);
+bool ismeet();
+bool isin(int i, int j);
+short find(char flag, int layer, int alpha, int beta);
+int eager_find(int layer, int target, int lwindow, int rwindow, int flag);
+short getvalue();
+void show_AND_make_move();
+short getRED_value(int total_chess,char arr[10][9]);
 void generateMove(std::vector<movechess>& arr, char flag);
-void MakeMove(std::vector<movechess>::iterator, int& , int&,char);
-void UnMove(std::vector<movechess>::iterator,int,int,char);
+void MakeMove(std::vector<movechess>::iterator, int&, int&, char);
+void UnMove(std::vector<movechess>::iterator, int, int, char);
+
+
+
+
 #endif

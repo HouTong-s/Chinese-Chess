@@ -1,5 +1,15 @@
 #include"func.h"
 using namespace std;
+
+movechess::movechess(char a, char b, char c, char d, short e) : x(a), y(b), move_x(c), move_y(d), val(e)
+{
+
+}
+bool movechess::operator<(movechess a) const
+{
+	return val > a.val;
+}
+
 bool isdefeat(int flag)
 {
 	for (int i = 0; i < 10; i++)
@@ -19,57 +29,7 @@ bool ismeet()/* 判断两边老将是否碰面  */
 		return true;
 	}
 }
-void cut(int layer, int r, int i, int j, int& alpha, int& beta, int a, int b, int ty, short& current)
-{
-	if (layer == 0)/*    第一层返回下一步招法，第一层不可能有分支被剪掉（如果beta为无穷）(如果为渴望搜索算法，则有可能会剪枝)  */
-	{
-		//第一步选择
-		if (is_firststep == 0)
-		{
-			m = i;
-			n = j;
-			tox = a;
-			toy = b;
-			type = ty;
-			is_firststep = 1;
-		}
-		else if (r > current)
-		{
-			m = i;
-			n = j;
-			tox = a;
-			toy = b;
-			type = ty;
-		}
-		/*		if (r == current)
-				{
-					cout << ty<<" "<<""<<j+1<<"到"<<j+1+b<<"和"<<i+a+1<<" "<<r << endl;
-				}*/
-		else if (r == current)
-		{
-			if (rand() % 200 == 0)
-			{
-				m = i;
-				n = j;
-				tox = a;
-				toy = b;
-				type = ty;
-			}
-		}
-		current = current > r ? current : r;
-		alpha = alpha > r ? alpha : r;/*    alpha剪枝      */
-	}
-	else if (layer % 2 == 0)
-	{
-		current = current > r ? current : r;
-		alpha = alpha > r ? alpha : r;/*    alpha剪枝      */
-	}
-	else
-	{
-		current = current < r ? current : r;
-		beta = r < beta ? r : beta;/*    beta剪枝      */
-	}
-}
+
 bool isin(int i, int j)
 {
 	return 0 <= i && i < 10 && 0 <= j && j < 9;

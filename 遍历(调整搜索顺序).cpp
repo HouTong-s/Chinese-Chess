@@ -504,16 +504,12 @@ short find(char flag, int layer, int alpha, int beta)
 {
 	if (isdefeat(flag))
 	{
-		return -side * (int)flag * 10000;
-	}
-	if (isdefeat(-flag))
-	{
-		return side * (int)flag * 10000;
+		return -10000;
 	}
 	//老将见面
 	if (ismeet())
 	{
-		return side * (int)flag * 10000;
+		return 10000;
 	}
 	if (layer == mylayer)/*      最底层估值函数         */
 	{
@@ -523,13 +519,10 @@ short find(char flag, int layer, int alpha, int beta)
 	{
 		is_firststep = 0;
 	}
-	short current;
-	if (layer % 2 == 0)
-		current = -20000;
-	else
-		current = 20000;
-	int r;
+	short current = -20000;
+	int value;
 	int origin;
+	//arr数组用于招法排序
 	vector<movechess> arr;
 	generateMove(arr, flag);
 	int prechess;
@@ -540,9 +533,46 @@ short find(char flag, int layer, int alpha, int beta)
 	for (auto i = arr.begin(); i != arr.end(); i++)
 	{	
 		MakeMove(i, origin, prechess, flag);
-		r = find(-flag, layer + 1, alpha, beta);
+		value = -find(-flag, layer + 1, -beta, -alpha);
 		UnMove(i, origin, prechess, flag);
-		cut(layer, r, i->x, i->y, alpha, beta, i->move_x, i->move_y, board[i->x][i->y], current);
+
+		if (layer == 0)/*    第一层返回下一步招法，第一层不可能有分支被剪掉（如果beta为无穷）(如果为渴望搜索算法，则有可能会剪枝)  */
+		{
+			//第一步选择
+			if (is_firststep == 0)
+			{
+				m = i->x;
+				n = i->y;
+				tox = i->move_x;
+				toy = i->move_y;
+				type = board[i->x][i->y];
+				is_firststep = 1;
+
+			}
+			//估值更高；(或者估值相等的时候有一定的概率使用该招法，增加一点随机性)
+			//|| (value == current && rand() % 20 == 0)
+			if (value > current || (value == current && rand() % 200 == 0))
+			{
+				m = i->x;
+				n = i->y;
+				tox = i->move_x;
+				toy = i->move_y;
+				type = board[i->x][i->y];
+				current = value;
+				if (value > alpha)
+				{
+					alpha = value;
+				}
+			}
+		}
+		else if (value > current)
+		{
+			current = value;
+			if (value > alpha)
+			{
+				alpha = value;
+			}
+		}
 		if (beta <= alpha) break;
 	}
 	return current;

@@ -72,7 +72,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 					}
 				}
 				result += nu;
-				if ((i != 0 || j != 0) && (i != 0 || j != 8) && (i != 9 || j != 0) && (i != 9 || j != 8)) result += 20;
+				if ((i != 0 || j != 0) && (i != 0 || j != 8) && (i != 9 || j != 0) && (i != 9 || j != 8)) result += 19;
 			}/*车估值到此为止 */
 			else if (temp_board[i][j] == 2)/* 红马估值开始*/
 			{
@@ -153,12 +153,12 @@ short getRED_value(int total_chess,char temp_board[10][9])
 						nu += 5;
 					}
 				}
-				nu += 5 * (9 - i);
+				nu += 6 * (9 - i);
 				result += nu;
 			}/*红马估值到此为止*/
 			else if (temp_board[i][j] == 3)/* 红象估值开始*/
 			{
-				int nu = 110;
+				int nu = 100;
 				if (isin(i + 1, j + 1) && temp_board[i + 1][j + 1] == 0 && i + 2 >= 5)/* 象不过河 */
 				{
 					if (temp_board[i + 2][j + 2] < 0)
@@ -207,15 +207,17 @@ short getRED_value(int total_chess,char temp_board[10][9])
 			}/* 红象估值到此为止*/
 			else if (temp_board[i][j] == 4)//红士估值开始
 			{
-				int nu = 110;
+				int nu = 100;
 				if (i + 1 >= 7 && i + 1 <= 9 && j + 1 >= 3 && j + 1 <= 5)
 				{
 					if (temp_board[i + 1][j + 1] <= 0)
 						nu += 4;
 					else if (temp_board[i + 1][j + 1] == temp_board[i][j])
 						nu += 6;
+					else if (i + 1 != 8)
+						nu += 2;
 					else
-						nu += 3;
+						nu += 1;
 				}
 				if (i - 1 >= 7 && i - 1 <= 9 && j + 1 >= 3 && j + 1 <= 5)
 				{
@@ -223,8 +225,10 @@ short getRED_value(int total_chess,char temp_board[10][9])
 						nu += 4;
 					else if (temp_board[i - 1][j + 1] == temp_board[i][j])
 						nu += 6;
+					else if (i-1 != 8)
+						nu += 5;
 					else
-						nu += 3;
+						nu += 1;
 				}
 				if (i + 1 >= 7 && i + 1 <= 9 && j - 1 >= 3 && j - 1 <= 5)
 				{
@@ -232,8 +236,10 @@ short getRED_value(int total_chess,char temp_board[10][9])
 						nu += 4;
 					else if (temp_board[i + 1][j - 1] == temp_board[i][j])
 						nu += 6;
+					else if (i + 1 != 8)
+						nu += 2;
 					else
-						nu += 3;
+						nu += 1;
 				}
 				if (i - 1 >= 7 && i - 1 <= 9 && j - 1 >= 3 && j - 1 <= 5)
 				{
@@ -241,14 +247,16 @@ short getRED_value(int total_chess,char temp_board[10][9])
 						nu += 4;
 					else if (temp_board[i - 1][j - 1] == temp_board[i][j])
 						nu += 6;
+					else if (i - 1 != 8)
+						nu += 5;
 					else
-						nu += 3;
+						nu += 1;
 				}
 				result += nu;
 			}//红士估值到此为止
 			else if (temp_board[i][j] == 7)/* 红兵估值*/
 			{
-				int nu = 135 - 3 * total_chess;
+				int nu = 150 - 3 * total_chess;
 				nu += soldier_value[i][j];
 				result += nu;
 			}
@@ -261,19 +269,19 @@ short getRED_value(int total_chess,char temp_board[10][9])
 				int g;
 				if (isin(i + 1, j) && temp_board[i + 1][j] == 0)
 				{
-					result += 6;
+					result += 4;
 				}
 				if (isin(i - 1, j) && temp_board[i - 1][j] == 0)
 				{
-					result += 6;
+					result += 4;
 				}
 				if (isin(i, j + 1) && temp_board[i][j + 1] == 0)
 				{
-					result += 6;
+					result += 4;
 				}
 				if (isin(i, j - 1) && temp_board[i][j - 1] == 0)
 				{
-					result += 6;
+					result += 4;
 				}
 				for (g = 1, num = 0; g < 10; g++)
 				{
@@ -289,7 +297,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 							break;
 						if (num == 1)
 						{
-							result += 4;
+							result += 2;
 						}
 						if (num >= 2)
 						{
@@ -297,7 +305,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 								result += (8 >> (num-2) );
 							else if (temp_board[i + g][j] > 0 && num == 2)
 							{
-								result += 5;
+								result += 2;
 							}
 						}
 					}
@@ -316,7 +324,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 							break;
 						if (num == 1)
 						{
-							result += 4;
+							result += 5;
 						}
 						if (num >= 2)
 						{
@@ -343,7 +351,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 							break;
 						if (num == 1)
 						{
-							result += 4;
+							result += 3;
 						}
 						if (num >= 2)
 						{
@@ -351,7 +359,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 								result += (8 >> (num-2) );
 							else if (temp_board[i][j + g] > 0 && num == 2)
 							{
-								result += 5;
+								result += 3;
 							}
 						}
 					}
@@ -370,7 +378,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 							break;
 						if (num == 1)
 						{
-							result += 4;
+							result += 3;
 						}
 						if (num >= 2)
 						{
@@ -378,7 +386,7 @@ short getRED_value(int total_chess,char temp_board[10][9])
 								result += (8 >> (num-2) );
 							else if (temp_board[i][j + g] > 0 && num == 2)
 							{
-								result += 5;
+								result += 3;
 							}
 						}
 					}

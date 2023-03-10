@@ -1,6 +1,79 @@
 #include"func.h"
 using namespace std;
 
+unsigned long long GetOneHash(int i, int j)
+{
+	int temp = 0;
+	if (board[i][j] > 0)
+	{
+		temp = 7 + board[i][j];
+	}
+	else if(board[i][j] < 0)
+	{
+		temp = -board[i][j];
+	}
+	if (temp == 0)
+		return 0;
+	return RAND[(9*i+j)*15+temp];
+}
+
+unsigned long long MyHashes()
+{
+	unsigned long long temp = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			if(board[i][j]!=0)
+				temp ^= GetOneHash(i, j);
+		}
+	}
+	return temp;
+}
+
+unsigned long long GetOneVerify(int i, int j)
+{
+	int temp = 0;
+	if (board[i][j] > 0)
+	{
+		temp = 7 + board[i][j];
+	}
+	else if (board[i][j] < 0)
+	{
+		temp = -board[i][j];
+	}
+	if (temp == 0)
+		return 0;
+	return V_RAND[(9 * i + j) * 15 + temp];
+}
+
+unsigned long long MyVerifyCode()
+{
+	unsigned long long temp = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		for (int j = 0; j < 9; j++)
+		{
+			if(board[i][j]!=0)
+				temp ^= GetOneVerify(i, j);
+		}
+	}
+	return temp;
+}
+Stage::Stage()
+{
+	depth = 0;
+	value = 0;
+	verify = 0;
+
+}
+Stage::Stage(char a, short b, unsigned long long c)
+{
+	depth = a;
+	value = b;
+	verify = c;
+}
+
 movechess::movechess(char a, char b, char c, char d, short e) : x(a), y(b), move_x(c), move_y(d), val(e)
 {
 
@@ -34,7 +107,7 @@ bool isin(int i, int j)
 {
 	return 0 <= i && i < 10 && 0 <= j && j < 9;
 }
-void show_AND_make_move()
+void show_move()
 {
 	int q = abs(type);
 	if (side == RED)
@@ -89,35 +162,38 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 	clock_t time_start = clock();
 	mylayer = layer;
 	int q = find(flag, 0, target - lwindow, target + rwindow);
-	if (q == -10000)
+	if (q <= -9900 || q >= 9900)
 	{
-		if (side == RED)
-			cout << "红方";
-		else
-			cout << "黑方";
-		cout << "认输！";
-		return -10000;
+		clock_t time_end = clock();
+		cout << layer << "层time use:" << 1000 * (int)(time_end - time_start) / (double)CLOCKS_PER_SEC << "ms " << layer << "层估值：" << q << endl;
+		show_move();
+		show();
+		cout << endl;
+		return q;
 	}
 	if (q <= target - lwindow)
 	{
+		REDValues.clear();
+		BLACKValues.clear();
 		cout << layer << "层搜索值为:" << q << "  再搜索一次区间左侧" << endl;
 		q = find(flag, 0, -10000, target - lwindow);
+		
 	}
 	else if (q >= target + rwindow)
 	{
+		REDValues.clear();
+		BLACKValues.clear();
 		cout << layer << "层搜索值为:" << q << "再搜索一次区间右侧" << endl;
 		q = find(flag, 0, target + rwindow, 10000);
 	}
 	clock_t time_end = clock();
 	cout << layer << "层time use:" << 1000 * (int)(time_end - time_start) / (double)CLOCKS_PER_SEC << "ms " << layer << "层估值：" << q << endl;
-	if (q == -10000)
+	if (q <= -9900 || q >= 9900)
 	{
-		if (side == RED)
-			cout << "红方";
-		else
-			cout << "黑方";
-		cout << "认输！";
-		return -10000;
+		show_move();
+		show();
+		cout << endl;
+		return q;
 	}
 	/*
 	if (layer == 4)
@@ -131,14 +207,14 @@ int eager_find(int layer, int target, int lwindow, int rwindow, int flag)
 	//时间超过2秒就停止继续深入寻找
 	if (1000 * (int)(time_end - time_start) / (double)CLOCKS_PER_SEC >= 2000)
 	{
-		show_AND_make_move();
+		show_move();
 		show();
 		cout << endl;
 		return q;
 	}
 	else
 	{
-		int temp = (85 - 15 * layer) > 10 ? (85 - 15 * layer) : 10;
+		int temp = (70 - 15 * layer) > 30 ? (70 - 15 * layer) : 30;
 		return eager_find(layer + 2, q, temp, temp, flag);
 	}
 		

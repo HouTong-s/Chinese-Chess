@@ -16,10 +16,16 @@ void MakeMove(std::vector<movechess>::iterator i,int& origin,int & prechess,char
 			black_x = i->x + i->move_x;
 		}
 	}
+	boardkey ^= GetOneHash(i->x, i->y);
+	boardkey ^= GetOneHash(i->x + i->move_x , i->y + i->move_y);
+	verifykey ^= GetOneVerify(i->x, i->y);
+	verifykey ^= GetOneVerify(i->x + i->move_x, i->y + i->move_y);
 	origin = board[i->x + i->move_x][i->y + i->move_y];
 	prechess = board[i->x][i->y];
 	board[i->x + i->move_x][i->y + i->move_y] = board[i->x][i->y];
 	board[i->x][i->y] = 0;
+	boardkey ^= GetOneHash(i->x + i->move_x, i->y + i->move_y);
+	verifykey ^= GetOneVerify(i->x + i->move_x, i->y + i->move_y);
 }
 void UnMove(std::vector<movechess>::iterator i, int origin, int prechess, char flag)
 {
@@ -502,14 +508,52 @@ void generateMove(vector<movechess>& arr,char flag)
 }
 short find(char flag, int layer, int alpha, int beta)
 {
+	/*
+	Stage now = Stage(flag, board);
+	//cout << sizeof(now) << endl;
+	auto iter = StageValues.find(now);
+	if (iter != StageValues.end())
+	{		
+		if (iter->second.first >= mylayer - layer)
+		{
+			//cout << iter->second.second << " ";
+			return iter->second.second;
+		}
+	}
+	*/
+	if (layer != 0)
+	{
+		if (flag == RED)
+		{
+			auto iter = REDValues.find(boardkey);
+			if (iter != REDValues.end() && iter->second.verify == verifykey)
+			{
+				if (iter->second.depth >= mylayer - layer)
+				{
+					return iter->second.value;
+				}
+			}
+		}
+		else
+		{
+			auto iter = BLACKValues.find(boardkey);
+			if (iter != BLACKValues.end() && iter->second.verify == verifykey)
+			{
+				if (iter->second.depth >= mylayer - layer)
+				{
+					return iter->second.value;
+				}
+			}
+		}
+	}
 	if (isdefeat(flag))
 	{
-		return -10000;
+		return -10000 +layer;
 	}
 	//老将见面
 	if (ismeet())
 	{
-		return 10000;
+		return 10000 -layer;
 	}
 	if (layer == mylayer)/*      最底层估值函数         */
 	{
@@ -530,12 +574,16 @@ short find(char flag, int layer, int alpha, int beta)
 		sort(arr.begin(), arr.end());
 	else
 		sort(arr.rbegin(), arr.rend());
+	unsigned long long tempHash = boardkey;
+	unsigned long long tempVerify = verifykey;
 	for (auto i = arr.begin(); i != arr.end(); i++)
 	{	
-		MakeMove(i, origin, prechess, flag);
+		
+		MakeMove(i, origin, prechess, flag);		
 		value = -find(-flag, layer + 1, -beta, -alpha);
 		UnMove(i, origin, prechess, flag);
-
+		boardkey = tempHash;
+		verifykey = tempVerify;
 		if (layer == 0)/*    第一层返回下一步招法，第一层不可能有分支被剪掉（如果beta为无穷）(如果为渴望搜索算法，则有可能会剪枝)  */
 		{
 			//第一步选择
@@ -550,8 +598,8 @@ short find(char flag, int layer, int alpha, int beta)
 
 			}
 			//估值更高；(或者估值相等的时候有一定的概率使用该招法，增加一点随机性)
-			//|| (value == current && rand() % 20 == 0)
-			if (value > current || (value == current && rand() % 200 == 0))
+			//
+			if (value > current || (value == current && rand() % 100 == 0))
 			{
 				m = i->x;
 				n = i->y;
@@ -574,6 +622,18 @@ short find(char flag, int layer, int alpha, int beta)
 			}
 		}
 		if (beta <= alpha) break;
+	}
+	if (mylayer - layer >= 3)
+	{
+		Stage a = Stage(mylayer - layer, current, verifykey);
+		if (flag == RED)
+		{
+			REDValues[boardkey] = a;
+		}
+		else
+		{
+			BLACKValues[boardkey] = a;
+		}
 	}
 	return current;
 }

@@ -413,8 +413,12 @@ short getvalue()
 		}
 	}
 	v2 = getRED_value(number, tempboard);
-	if(side == RED)
-		return v1 - v2 + 120;
+	if (side == RED)
+	{		
+		return v1 - v2;
+	}	
 	else
+	{
 		return v2 - v1;
+	}	
 }
